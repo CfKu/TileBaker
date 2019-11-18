@@ -8,14 +8,9 @@ Tile baker - combines pictures in given source directory
 @author: kuestner
 """
 
-# Prepare for Python3
-from __future__ import (
-    absolute_import, division, print_function, unicode_literals)
-
-
-#==============================================================================
+# ==============================================================================
 # IMPORT
-#==============================================================================
+# ==============================================================================
 import sys
 import os
 import platform
@@ -27,23 +22,23 @@ from PIL import Image
 # Local imports
 
 
-#==============================================================================
+# ==============================================================================
 # CONSTANTS
-#==============================================================================
-IMAGE_SOURCE_FOLDER = "Mitarbeiterbilder"
-KACHEL_SHAPE = (8, 5)  # number of images on kachel: horizontal, vertical
-KACHEL_IMG_SIZE_OUT = (2800, 2800)  # pixels: horizontal, vertical
+# ==============================================================================
+IMAGE_SOURCE_FOLDER = "img"
+KACHEL_SHAPE = (5, 2)  # number of images on kachel: horizontal, vertical
+KACHEL_IMG_SIZE_OUT = (2800, 1500)  # pixels: horizontal, vertical
 KACHEL_IMG_SIZE_OUT_LOW = 1000  # width or height of low resultion kachel out
 KACHEL_COLOR_SCHEME = "RGB"  # color scheme: RGB or CMYK
-KACHEL_FILENAME_OUT = "Lehrstuhlkachel"
+KACHEL_FILENAME_OUT = "department_tile"
 KACHEL_JPG_QUALITY = 96  # JPG quality of output JPG file
 
 
-#==============================================================================
+# ==============================================================================
 # DEFINITION
-#==============================================================================
+# ==============================================================================
 print()
-print(" KACHEL BAKER by CfK & CSr ~~~".rjust(80, "~"))
+print(" TILE BAKER by CfK & CSr ~~~".rjust(80, "~"))
 print()
 print(">>> Info: Due to your security settings in windows, the execution of\n"
       " this script directly on a network share (like \\faumfkN) may fail\n"
