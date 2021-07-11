@@ -1,7 +1,6 @@
 # conda env update/create -f environment.yml
 name: tile-baker
 channels:
-  - defaults
   - conda-forge
 dependencies:
   ### RUNTIME -------------------------------------------------------------------
@@ -14,10 +13,8 @@ dependencies:
   #  - pip:
   #      -
   ### DEVELOPMENT ---------------------------------------------------------------
-  - pep8
-  - pylint
   - pycodestyle
-  - autopep8
-  - rope
+  - black
+  - pylint
   - chardet
   - ipython
