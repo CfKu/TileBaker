@@ -40,10 +40,12 @@ KACHEL_JPG_QUALITY = 96  # JPG quality of output JPG file
 print()
 print(" TILE BAKER by CfK & CSr ~~~".rjust(80, "~"))
 print()
-print(">>> Info: Due to your security settings in windows, the execution of\n"
-      " this script directly on a network share (like \\faumfkN) may fail\n"
-      " to load some of the images. Please copy all files to a local drive\n"
-      " like C:\, D:\, ... and run it again.")
+print(
+    ">>> Info: Due to your security settings in windows, the execution of\n"
+    " this script directly on a network share (like \\faumfkN) may fail\n"
+    " to load some of the images. Please copy all files to a local drive\n"
+    " like C:\, D:\, ... and run it again."
+)
 print()
 
 # init kachel output image
@@ -58,22 +60,27 @@ img_px_width = kachel_px_width // img_count_h
 img_px_height = kachel_px_height // img_count_v
 
 # print some information
-print(">>> Info: The height of each image is fitted to the defined\n"
-      " kachel space ({}x{} images on {}x{} pixels). If you want to change\n"
-      " the clipping of an image, you will have to crop it with an image \n"
-      " editor of your choice.".format(img_count_h, img_count_v,
-                                       kachel_px_width, kachel_px_height))
+print(
+    ">>> Info: The height of each image is fitted to the defined\n"
+    " kachel space ({}x{} images on {}x{} pixels). If you want to change\n"
+    " the clipping of an image, you will have to crop it with an image \n"
+    " editor of your choice.".format(
+        img_count_h, img_count_v, kachel_px_width, kachel_px_height
+    )
+)
 print()
 
 # read all available images
-img_src = glob(os.path.abspath(
-    os.path.join(".", IMAGE_SOURCE_FOLDER, "*.jpg")))
+img_src = glob(os.path.abspath(os.path.join(".", IMAGE_SOURCE_FOLDER, "*.jpg")))
 
 # check number of pictures and dimension of kachel
 if len(img_src) != img_count_h * img_count_v:
-    print("Number of images (={}) does not match kachel size (={}x{})!\n"
-          "Please adjust kachel size or the number of images...".format(
-              len(img_src), img_count_h, img_count_v))
+    print(
+        "Number of images (={}) does not match kachel size (={}x{})!\n"
+        "Please adjust kachel size or the number of images...".format(
+            len(img_src), img_count_h, img_count_v
+        )
+    )
 else:
     # compose kachel
     for i_v in range(img_count_v):
@@ -90,8 +97,8 @@ else:
             # fit height of img in space
             img_ratio = img_width / img_height
             img = img.resize(
-                (int(img_px_height * img_ratio), img_px_height),
-                Image.ANTIALIAS)
+                (int(img_px_height * img_ratio), img_px_height), Image.ANTIALIAS
+            )
             img_width, img_height = img.size
             # check width of image
             if img_width < img_px_width:
@@ -100,7 +107,8 @@ else:
                     " >>> Image ratio missmatch; Image width is too small "
                     "after fitting to height.\n"
                     " >>> Please crop it manually with an image editor of "
-                    "your choice and run again!")
+                    "your choice and run again!"
+                )
             else:
                 status_message = "OK"
             # center image horizontally by cropping it on the left side
@@ -113,26 +121,26 @@ else:
             # paste image in kachel
             kachel_out.paste(img, (img_pos_x, img_pos_y))
             # print status
-            print("Process {:>2} (h:{:>2}|v:{:>2}): {} "
-                  .format(img_i + 1, i_h + 1, i_v + 1,
-                          os.path.basename(img_filepath))
-                  .ljust(60, ".")
-                  + " "
-                  + status_message)
+            print(
+                "Process {:>2} (h:{:>2}|v:{:>2}): {} ".format(
+                    img_i + 1, i_h + 1, i_v + 1, os.path.basename(img_filepath)
+                ).ljust(60, ".")
+                + " "
+                + status_message
+            )
 
     # store kachel as jpg file
     now = datetime.now()
     date_now = now.strftime("%Y%m%d")
     kachel_out_filename_base = "{}__{}".format(date_now, KACHEL_FILENAME_OUT)
     # store high resolution
-    kachel_out_filepath_high = os.path.abspath(
-        kachel_out_filename_base + ".jpg")
+    kachel_out_filepath_high = os.path.abspath(kachel_out_filename_base + ".jpg")
     kachel_out.save(kachel_out_filepath_high, quality=KACHEL_JPG_QUALITY)
     # resize and store low resultion
-    kachel_out.thumbnail((KACHEL_IMG_SIZE_OUT_LOW, KACHEL_IMG_SIZE_OUT_LOW),
-                         Image.ANTIALIAS)
-    kachel_out_filepath_low = os.path.abspath(
-        kachel_out_filename_base + "--SMALL.jpg")
+    kachel_out.thumbnail(
+        (KACHEL_IMG_SIZE_OUT_LOW, KACHEL_IMG_SIZE_OUT_LOW), Image.ANTIALIAS
+    )
+    kachel_out_filepath_low = os.path.abspath(kachel_out_filename_base + "--SMALL.jpg")
     kachel_out.save(kachel_out_filepath_low, quality=KACHEL_JPG_QUALITY)
     # open and print high resultion
     current_platform = platform.system()
