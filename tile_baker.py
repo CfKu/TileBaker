@@ -25,7 +25,9 @@ from PIL import Image
 # ==============================================================================
 # CONSTANTS
 # ==============================================================================
-IMAGE_SOURCE_FOLDER = "img"
+# TODO: Introduce margin
+IMAGE_INPUT_FOLDER = "img_in"
+IMAGE_OUTPUT_FOLDER = "img_out"
 KACHEL_SHAPE = (5, 2)  # number of images on kachel: horizontal, vertical
 KACHEL_IMG_SIZE_OUT = (2800, 1500)  # pixels: horizontal, vertical
 KACHEL_IMG_SIZE_OUT_LOW = 1000  # width or height of low resultion kachel out
@@ -41,8 +43,8 @@ print()
 print(" TILE BAKER by CfK & CSr ~~~".rjust(80, "~"))
 print()
 print(
-    ">>> Info: Due to your security settings in windows, the execution of\n"
-    " this script directly on a network share (like \\faumfkN) may fail\n"
+    ">>> Info: Due to your security settings in Windows, the execution of\n"
+    " this script directly on a network share (like \\...) may fail\n"
     " to load some of the images. Please copy all files to a local drive\n"
     " like C:\, D:\, ... and run it again."
 )
@@ -71,7 +73,7 @@ print(
 print()
 
 # read all available images
-img_src = glob(os.path.abspath(os.path.join(".", IMAGE_SOURCE_FOLDER, "*.jpg")))
+img_src = glob(os.path.abspath(os.path.join(".", IMAGE_INPUT_FOLDER, "*.jpg")))
 
 # check number of pictures and dimension of kachel
 if len(img_src) != img_count_h * img_count_v:
@@ -134,13 +136,17 @@ else:
     date_now = now.strftime("%Y%m%d")
     kachel_out_filename_base = "{}__{}".format(date_now, KACHEL_FILENAME_OUT)
     # store high resolution
-    kachel_out_filepath_high = os.path.abspath(kachel_out_filename_base + ".jpg")
+    kachel_out_filepath_high = os.path.abspath(
+        os.path.join(IMAGE_OUTPUT_FOLDER, kachel_out_filename_base + ".jpg")
+    )
     kachel_out.save(kachel_out_filepath_high, quality=KACHEL_JPG_QUALITY)
     # resize and store low resultion
     kachel_out.thumbnail(
         (KACHEL_IMG_SIZE_OUT_LOW, KACHEL_IMG_SIZE_OUT_LOW), Image.ANTIALIAS
     )
-    kachel_out_filepath_low = os.path.abspath(kachel_out_filename_base + "--SMALL.jpg")
+    kachel_out_filepath_low = os.path.abspath(
+        os.path.join(IMAGE_OUTPUT_FOLDER, kachel_out_filename_base + "--SMALL.jpg")
+    )
     kachel_out.save(kachel_out_filepath_low, quality=KACHEL_JPG_QUALITY)
     # open and print high resultion
     current_platform = platform.system()
