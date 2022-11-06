@@ -1,3 +1,6 @@
 *.jpg
 *.jpeg
+img_in/
+img_out/
 .vscode/
+.DS_Store
