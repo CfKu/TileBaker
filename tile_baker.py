@@ -27,13 +27,13 @@ from PIL import Image
 # ==============================================================================
 # TODO: Introduce margin
 IMAGE_INPUT_FOLDER = "img_in"
-KACHEL_OUTPUT_FOLDER = "img_out"
-KACHEL_OUTPUT_FILENAME = "department_tile"
-KACHEL_SHAPE = (5, 2)  # number of images on kachel: horizontal, vertical
-KACHEL_IMG_SIZE_OUT = (2800, 1500)  # pixels: horizontal, vertical
-KACHEL_IMG_SIZE_OUT_LOW = 1000  # width or height of low resultion kachel out
-KACHEL_COLOR_SCHEME = "RGB"  # color scheme: RGB or CMYK
-KACHEL_JPG_QUALITY = 96  # JPG quality of output JPG file
+TILE_OUTPUT_FOLDER = "img_out"
+TILE_OUTPUT_FILENAME = "department_tile"
+TILE_SHAPE = (5, 2)  # number of images on kachel: horizontal, vertical
+TILE_IMG_SIZE_OUT = (2800, 1500)  # pixels: horizontal, vertical
+TILE_IMG_SIZE_OUT_LOW = 1000  # width or height of low resultion kachel out
+TILE_COLOR_SCHEME = "RGB"  # color scheme: RGB or CMYK
+TILE_JPG_QUALITY = 96  # JPG quality of output JPG file
 
 
 # ==============================================================================
@@ -50,24 +50,24 @@ print(
 )
 print()
 
-# init kachel output image
-kachel_out = Image.new(KACHEL_COLOR_SCHEME, KACHEL_IMG_SIZE_OUT)
-kachel_px_width = KACHEL_IMG_SIZE_OUT[0]
-kachel_px_height = KACHEL_IMG_SIZE_OUT[1]
+# init tile output image
+tile_out = Image.new(TILE_COLOR_SCHEME, TILE_IMG_SIZE_OUT)
+tile_px_width = TILE_IMG_SIZE_OUT[0]
+tile_px_height = TILE_IMG_SIZE_OUT[1]
 
 # init available pixel size for each image
-img_count_h = KACHEL_SHAPE[0]
-img_count_v = KACHEL_SHAPE[1]
-img_px_width = kachel_px_width // img_count_h
-img_px_height = kachel_px_height // img_count_v
+img_count_h = TILE_SHAPE[0]
+img_count_v = TILE_SHAPE[1]
+img_px_width = tile_px_width // img_count_h
+img_px_height = tile_px_height // img_count_v
 
 # print some information
 print(
     ">>> Info: The height of each image is fitted to the defined\n"
-    " kachel space ({}x{} images on {}x{} pixels). If you want to change\n"
+    " tile space ({}x{} images on {}x{} pixels). If you want to change\n"
     " the clipping of an image, you will have to crop it with an image \n"
     " editor of your choice.".format(
-        img_count_h, img_count_v, kachel_px_width, kachel_px_height
+        img_count_h, img_count_v, tile_px_width, tile_px_height
     )
 )
 print()
@@ -75,16 +75,16 @@ print()
 # read all available images
 img_src = glob(os.path.abspath(os.path.join(".", IMAGE_INPUT_FOLDER, "*.jpg")))
 
-# check number of pictures and dimension of kachel
+# check number of pictures and dimension of tiles
 if len(img_src) != img_count_h * img_count_v:
     print(
-        "Number of images (={}) does not match kachel size (={}x{})!\n"
-        "Please adjust kachel size or the number of images...".format(
+        "Number of images (={}) does not match tile size (={}x{})!\n"
+        "Please adjust tile size or the number of images...".format(
             len(img_src), img_count_h, img_count_v
         )
     )
 else:
-    # compose kachel
+    # compose tiles
     for i_v in range(img_count_v):
         for i_h in range(img_count_h):
             # image file source
@@ -120,8 +120,8 @@ else:
             crop_bottom = img_height
             crop_box = (crop_left, crop_top, crop_right, crop_bottom)
             img = img.crop(crop_box)
-            # paste image in kachel
-            kachel_out.paste(img, (img_pos_x, img_pos_y))
+            # paste image in tile
+            tile_out.paste(img, (img_pos_x, img_pos_y))
             # print status
             print(
                 "Process {:>2} (h:{:>2}|v:{:>2}): {} ".format(
@@ -131,33 +131,31 @@ else:
                 + status_message
             )
 
-    # store kachel as jpg file
+    # store tile as jpg file
     now = datetime.now()
     date_now = now.strftime("%Y%m%d")
-    kachel_out_filename_base = "{}__{}".format(date_now, KACHEL_OUTPUT_FILENAME)
+    tile_out_filename_base = "{}__{}".format(date_now, TILE_OUTPUT_FILENAME)
     # store high resolution
-    kachel_out_filepath_high = os.path.abspath(
-        os.path.join(KACHEL_OUTPUT_FOLDER, kachel_out_filename_base + ".jpg")
+    tile_out_filepath_high = os.path.abspath(
+        os.path.join(TILE_OUTPUT_FOLDER, tile_out_filename_base + ".jpg")
     )
-    kachel_out.save(kachel_out_filepath_high, quality=KACHEL_JPG_QUALITY)
+    tile_out.save(tile_out_filepath_high, quality=TILE_JPG_QUALITY)
     # resize and store low resultion
-    kachel_out.thumbnail(
-        (KACHEL_IMG_SIZE_OUT_LOW, KACHEL_IMG_SIZE_OUT_LOW), Image.ANTIALIAS
+    tile_out.thumbnail((TILE_IMG_SIZE_OUT_LOW, TILE_IMG_SIZE_OUT_LOW), Image.ANTIALIAS)
+    tile_out_filepath_low = os.path.abspath(
+        os.path.join(TILE_OUTPUT_FOLDER, tile_out_filename_base + "--SMALL.jpg")
     )
-    kachel_out_filepath_low = os.path.abspath(
-        os.path.join(KACHEL_OUTPUT_FOLDER, kachel_out_filename_base + "--SMALL.jpg")
-    )
-    kachel_out.save(kachel_out_filepath_low, quality=KACHEL_JPG_QUALITY)
+    tile_out.save(tile_out_filepath_low, quality=TILE_JPG_QUALITY)
     # open and print high resultion
     current_platform = platform.system()
     if current_platform == "Windows":
-        os.startfile(kachel_out_filepath_high)
+        os.startfile(tile_out_filepath_high)
     elif current_platform == "Darwin":  # macOS
-        subprocess.call(("open", kachel_out_filepath_high))
+        subprocess.call(("open", tile_out_filepath_high))
     elif current_platform == "Linux":
-        subprocess.call(("xdg-open", kachel_out_filepath_high))
+        subprocess.call(("xdg-open", tile_out_filepath_high))
     else:
         raise NotImplementedError
     print()
-    print("Finished! >>>", kachel_out_filepath_high)
+    print("Finished! >>>", tile_out_filepath_high)
     print()
