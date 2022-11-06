@@ -134,6 +134,7 @@ else:
     # store tile as jpg file
     now = datetime.now()
     date_now = now.strftime("%Y%m%d")
+    os.makedirs(os.path.abspath(TILE_OUTPUT_FOLDER))
     tile_out_filename_base = "{}__{}".format(date_now, TILE_OUTPUT_FILENAME)
     # store high resolution
     tile_out_filepath_high = os.path.abspath(
