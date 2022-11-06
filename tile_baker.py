@@ -27,12 +27,12 @@ from PIL import Image
 # ==============================================================================
 # TODO: Introduce margin
 IMAGE_INPUT_FOLDER = "img_in"
-IMAGE_OUTPUT_FOLDER = "img_out"
+KACHEL_OUTPUT_FOLDER = "img_out"
+KACHEL_OUTPUT_FILENAME = "department_tile"
 KACHEL_SHAPE = (5, 2)  # number of images on kachel: horizontal, vertical
 KACHEL_IMG_SIZE_OUT = (2800, 1500)  # pixels: horizontal, vertical
 KACHEL_IMG_SIZE_OUT_LOW = 1000  # width or height of low resultion kachel out
 KACHEL_COLOR_SCHEME = "RGB"  # color scheme: RGB or CMYK
-KACHEL_FILENAME_OUT = "department_tile"
 KACHEL_JPG_QUALITY = 96  # JPG quality of output JPG file
 
 
@@ -134,10 +134,10 @@ else:
     # store kachel as jpg file
     now = datetime.now()
     date_now = now.strftime("%Y%m%d")
-    kachel_out_filename_base = "{}__{}".format(date_now, KACHEL_FILENAME_OUT)
+    kachel_out_filename_base = "{}__{}".format(date_now, KACHEL_OUTPUT_FILENAME)
     # store high resolution
     kachel_out_filepath_high = os.path.abspath(
-        os.path.join(IMAGE_OUTPUT_FOLDER, kachel_out_filename_base + ".jpg")
+        os.path.join(KACHEL_OUTPUT_FOLDER, kachel_out_filename_base + ".jpg")
     )
     kachel_out.save(kachel_out_filepath_high, quality=KACHEL_JPG_QUALITY)
     # resize and store low resultion
@@ -145,7 +145,7 @@ else:
         (KACHEL_IMG_SIZE_OUT_LOW, KACHEL_IMG_SIZE_OUT_LOW), Image.ANTIALIAS
     )
     kachel_out_filepath_low = os.path.abspath(
-        os.path.join(IMAGE_OUTPUT_FOLDER, kachel_out_filename_base + "--SMALL.jpg")
+        os.path.join(KACHEL_OUTPUT_FOLDER, kachel_out_filename_base + "--SMALL.jpg")
     )
     kachel_out.save(kachel_out_filepath_low, quality=KACHEL_JPG_QUALITY)
     # open and print high resultion
